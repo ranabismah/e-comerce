@@ -1,20 +1,20 @@
+// src/app/data/products.ts
 export const fetchProducts = async () => {
   try {
-    const response = await fetch("https://dummyjson.com/products?limit=90", {
-      cache: "no-store", // Prevent caching
+    const response = await fetch("https://dummyjson.com/products?limit=150", {
+      cache: "no-store", // Prevent caching for fresh data every time
     });
     if (!response.ok) {
       throw new Error("Failed to fetch products");
     }
     const data = await response.json();
-    const transformedData = data.products.map((item: any) => ({
+    return data.products.map((item: any) => ({
       id: item.id.toString(),
       title: item.title,
       description: item.description,
-      images: [item.image], // Single image URL
+      images: [item.thumbnail], // Use 'thumbnail' from DummyJSON
       price: item.price,
     }));
-    return transformedData;
   } catch (error) {
     console.error("Error fetching products:", error);
     return [];
@@ -24,7 +24,7 @@ export const fetchProducts = async () => {
 export const getProduct = async (id: string) => {
   try {
     const response = await fetch(`https://dummyjson.com/products/${id}`, {
-      cache: "no-store", 
+      cache: "no-store",
     });
     if (!response.ok) {
       throw new Error("Failed to fetch product");
@@ -34,7 +34,7 @@ export const getProduct = async (id: string) => {
       id: product.id.toString(),
       title: product.title,
       description: product.description,
-      images: [product.image], 
+      images: [product.thumbnail],
       price: product.price,
     };
   } catch (error) {
@@ -42,5 +42,3 @@ export const getProduct = async (id: string) => {
     throw error;
   }
 };
-
-
