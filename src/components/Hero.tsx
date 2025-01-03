@@ -21,7 +21,7 @@ const Hero = () => {
         </div>
         <div className="w-full lg:w-1/2">
           <Image
-            src="/next.svg"
+            src="/hero-section.png"
             alt="Hero Image"
             width={500}
             height={500}

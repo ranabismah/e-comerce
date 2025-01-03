@@ -1,9 +1,9 @@
-// src/app/products/page.tsx
 "use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { fetchProducts } from "../data/products";
+import { useCart } from "@/context/CartContext";
 
 interface Product {
   id: string;
@@ -17,6 +17,8 @@ const ProductsPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const { addToCart } = useCart(); 
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -34,6 +36,16 @@ const ProductsPage = () => {
 
   if (loading) return <div className="text-center py-8">Loading products...</div>;
   if (error) return <div className="text-center text-red-500 py-8">{error}</div>;
+
+  const handleAddToCart = (product: Product) => {
+    addToCart({
+      id: product.id,
+      name: product.title,
+      price: product.price,
+      image: product.images[0],
+      quantity: 1,
+    });
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-6 lg:px-8 py-8 bg-[#F5E6FE]">
@@ -58,12 +70,20 @@ const ProductsPage = () => {
                 {product.title}
               </h2>
               <p className="text-gray-600 mb-2">${product.price}</p>
-              <Link
-                href={`/products/${product.id}`}
-                className="text-[#6A0572] hover:text-[#C77DFF] underline"
-              >
-                View Details
-              </Link>
+              <div className="flex justify-between items-center">
+                <Link
+                  href={`/products/${product.id}`}
+                  className="text-[#6A0572] hover:text-[#C77DFF] underline"
+                >
+                  View Details
+                </Link>
+                <button
+                  onClick={() => handleAddToCart(product)}
+                  className="bg-[#6A0572] text-white px-4 py-2 rounded-md hover:bg-[#3D1E6D] transition"
+                >
+                  Add to Cart
+                </button>
+              </div>
             </div>
           </div>
         ))}
